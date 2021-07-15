@@ -165,7 +165,13 @@ class ElementResource extends BaseObject implements ResourceAdapterInterface
         /** @var string|ElementInterface $elementType */
         $elementType = $this->elementType;
         $query = $elementType::find();
-        Craft::configure($query, $this->criteria);
+        
+        foreach ($this->criteria as $name => $value) {
+            if($name === 'andRelatedTo') {
+                $query->andRelatedTo($value);
+            }
+            else $query->$name = $value;
+        }
 
         return $query;
     }
